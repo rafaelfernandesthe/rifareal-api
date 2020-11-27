@@ -1,5 +1,7 @@
 package br.com.rti.rifareal.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,7 +16,9 @@ import javax.persistence.ManyToOne;
 import br.com.rti.rifareal.domain.enums.StatusNumeroRifa;
 
 @Entity
-public class NumeroRifa {
+public class NumeroRifa implements Serializable {
+
+	private static final long serialVersionUID = -2008471313044680914L;
 
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY )
@@ -31,10 +35,20 @@ public class NumeroRifa {
 	private StatusNumeroRifa status;
 
 	@JoinColumn( name = "fk_id_ordem_de_compra" )
-	@ManyToOne( fetch = FetchType.LAZY, optional = false )
+	@ManyToOne( fetch = FetchType.LAZY )
 	private OrdemDeCompra ordemDeCompra;
 
 	public NumeroRifa() {}
+
+	public NumeroRifa( Long id ) {
+		this.id = id;
+	}
+
+	public NumeroRifa( Integer valor, Rifa rifa ) {
+		this.valor = valor;
+		this.rifa = rifa;
+		this.status = StatusNumeroRifa.DISPONIVEL;
+	}
 
 	public Long getId() {
 		return id;

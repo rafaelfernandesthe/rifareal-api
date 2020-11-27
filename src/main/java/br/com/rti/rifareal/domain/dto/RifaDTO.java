@@ -1,39 +1,27 @@
-package br.com.rti.rifareal.domain;
+package br.com.rti.rifareal.domain.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.springframework.beans.BeanUtils;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import br.com.rti.rifareal.domain.Rifa;
 import br.com.rti.rifareal.domain.enums.StatusRifa;
 
-@Entity
-public class Rifa implements Serializable {
+@JsonInclude( Include.NON_EMPTY )
+public class RifaDTO implements Serializable {
 
-	private static final long serialVersionUID = 1716807558437260933L;
+	private static final long serialVersionUID = 2638688190822943559L;
 
-	@Id
-	@GeneratedValue( strategy = GenerationType.IDENTITY )
-	@Column( name = "pk_id_rifa" )
 	private Long id;
-
-	@Enumerated( EnumType.ORDINAL )
 	private StatusRifa status;
-
 	private String codigo;
 	private String descricao;
 	private Integer valor;
@@ -41,26 +29,31 @@ public class Rifa implements Serializable {
 	private Integer diasRestantes;
 	private Integer rifasTotal;
 	private Integer rifasRestantes;
-
-	@Temporal( TemporalType.TIMESTAMP )
+	@JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
 	private Date dataInclusao;
-
-	@Temporal( TemporalType.TIMESTAMP )
+	@JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
 	private Date dataInicio;
-
-	@Temporal( TemporalType.TIMESTAMP )
+	@JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
 	private Date dataFim;
-
 	private String imagem;
+	private List<NumeroRifaDTO> numeros;
 
-	@JoinColumn( name = "fk_id_rifa" )
-	@OneToMany( cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true )
-	private List<NumeroRifa> numeros;
+	public RifaDTO() {}
 
-	public Rifa() {}
+	public RifaDTO( Rifa rifa, boolean lazy ) {
+		if ( rifa == null )
+			return;
+		BeanUtils.copyProperties( rifa, this, "numeros" );
+		if ( !lazy ) {
+			this.setNumeros( rifa.getNumeros().stream().map( r -> new NumeroRifaDTO( r ) ).collect( Collectors.toList() ) );
+		}
+	}
 
-	public Rifa( Long id ) {
-		this.id = id;
+	public Rifa toEntity() {
+		Rifa entity = new Rifa();
+		BeanUtils.copyProperties( this, entity );
+		entity.setNumeros( this.getNumeros().stream().map( n -> n.toEntity() ).collect( Collectors.toList() ) );
+		return entity;
 	}
 
 	public Long getId() {
@@ -151,14 +144,14 @@ public class Rifa implements Serializable {
 		this.imagem = imagem;
 	}
 
-	public List<NumeroRifa> getNumeros() {
+	public List<NumeroRifaDTO> getNumeros() {
 		if ( numeros == null ) {
-			numeros = new ArrayList<NumeroRifa>();
+			numeros = new ArrayList<NumeroRifaDTO>();
 		}
 		return numeros;
 	}
 
-	public void setNumeros( List<NumeroRifa> numeros ) {
+	public void setNumeros( List<NumeroRifaDTO> numeros ) {
 		this.numeros = numeros;
 	}
 
@@ -207,7 +200,7 @@ public class Rifa implements Serializable {
 			return false;
 		if ( getClass() != obj.getClass() )
 			return false;
-		Rifa other = (Rifa) obj;
+		RifaDTO other = (RifaDTO) obj;
 		if ( codigo == null ) {
 			if ( other.codigo != null )
 				return false;

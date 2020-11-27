@@ -59,6 +59,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>rifareal-api-${spring.profiles.active}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -74,14 +75,12 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<build.name>rifareal-api-dev</build.name>
 				<spring.profiles.active>dev</spring.profiles.active>
 			</properties>
 		</profile>
 		<profile>
-			<id>prd</id>
+			<id>prod</id>
 			<properties>
-				<build.name>rifareal-api</build.name>
 				<spring.profiles.active>prod</spring.profiles.active>
 			</properties>
 		</profile>
