@@ -26,6 +26,21 @@ public class RifaSiteController {
 	@Autowired
 	private RifaRepository rifaRepository;
 
+	@GetMapping( "/byMainPage" )
+	public ResponseEntity<RifaDTO> loadByMainPage() {
+		Rifa loaded = null;
+		try {
+			loaded = rifaRepository.findOneByTelaPrincipalTrue().orElse( null );
+		} catch ( Exception e ) {
+			// nothing
+		}
+
+		if ( loaded == null ) {
+			loaded = rifaRepository.findAll().get( 0 );
+		}
+		return new ResponseEntity<RifaDTO>( new RifaDTO( loaded, false ), HttpStatus.OK );
+	}
+
 	@GetMapping( "/byId/{id}" )
 	public ResponseEntity<RifaDTO> loadById( @PathVariable( "id" ) Long id ) {
 		Rifa loaded = rifaRepository.findById( id ).orElse( null );

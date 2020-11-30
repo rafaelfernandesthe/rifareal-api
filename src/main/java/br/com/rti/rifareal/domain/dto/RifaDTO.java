@@ -1,6 +1,7 @@
 package br.com.rti.rifareal.domain.dto;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,7 @@ public class RifaDTO implements Serializable {
 	private Date dataInicio;
 	@JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
 	private Date dataFim;
+	private String dataFimStr;
 	private String imagem;
 	private List<NumeroRifaDTO> numeros;
 
@@ -169,6 +171,17 @@ public class RifaDTO implements Serializable {
 
 	public void setDataInicio( Date dataInicio ) {
 		this.dataInicio = dataInicio;
+	}
+
+	public String getDataFimStr() {
+		if ( dataFim != null ) {
+			dataFimStr = new SimpleDateFormat( "dd/MM/yyyy" ).format( dataFim );
+		}
+		return dataFimStr;
+	}
+
+	public void setDataFimStr( String dataFimStr ) {
+		this.dataFimStr = dataFimStr;
 	}
 
 	@Override

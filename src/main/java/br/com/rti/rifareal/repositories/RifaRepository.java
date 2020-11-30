@@ -10,4 +10,6 @@ public interface RifaRepository extends JpaRepository<Rifa, Long> {
 
 	public Optional<Rifa> findOneByCodigo( String codigo );
 
+	public Optional<Rifa> findOneByTelaPrincipalTrue();
+
 }

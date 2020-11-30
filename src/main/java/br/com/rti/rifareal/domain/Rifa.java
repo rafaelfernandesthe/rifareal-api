@@ -53,6 +53,8 @@ public class Rifa implements Serializable {
 
 	private String imagem;
 
+	private boolean telaPrincipal;
+
 	@JoinColumn( name = "fk_id_rifa" )
 	@OneToMany( cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true )
 	private List<NumeroRifa> numeros;
@@ -174,6 +176,14 @@ public class Rifa implements Serializable {
 		return dataInicio;
 	}
 
+	public boolean isTelaPrincipal() {
+		return telaPrincipal;
+	}
+
+	public void setTelaPrincipal( boolean telaPrincipal ) {
+		this.telaPrincipal = telaPrincipal;
+	}
+
 	public void setDataInicio( Date dataInicio ) {
 		this.dataInicio = dataInicio;
 	}
@@ -280,7 +290,7 @@ public class Rifa implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Rifa [id=" + id + ", status=" + status + ", codigo=" + codigo + ", descricao=" + descricao + ", valor=" + valor + ", diasTotal=" + diasTotal + ", diasRestantes=" + diasRestantes + ", rifasTotal=" + rifasTotal + ", rifasRestantes=" + rifasRestantes + ", dataInclusao=" + dataInclusao + ", dataInicio=" + dataInicio + ", dataFim=" + dataFim + ", imagem=" + imagem + ", numeros=" + numeros + "]";
+		return "Rifa [id=" + id + ", status=" + status + ", codigo=" + codigo + ", descricao=" + descricao + ", valor=" + valor + ", diasTotal=" + diasTotal + ", diasRestantes=" + diasRestantes + ", rifasTotal=" + rifasTotal + ", rifasRestantes=" + rifasRestantes + ", dataInclusao=" + dataInclusao + ", dataInicio=" + dataInicio + ", dataFim=" + dataFim + ", imagem=" + imagem + ", telaPrincipal=" + telaPrincipal + ", numeros=" + numeros + "]";
 	}
 
 }
