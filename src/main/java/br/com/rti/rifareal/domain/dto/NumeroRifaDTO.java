@@ -55,11 +55,19 @@ public class NumeroRifaDTO implements Serializable {
 	}
 
 	private String getCpfVisao( String cpfOrdemDeCompra ) {
-		return "***." + cpfOrdemDeCompra.substring( 3, 6 ) + ".***-" + cpfOrdemDeCompra.substring( 9, 11 );
+		if ( cpfOrdemDeCompra.length() == 11 ) {
+			return "***." + cpfOrdemDeCompra.substring( 3, 6 ) + ".***-" + cpfOrdemDeCompra.substring( 9, 11 );
+		} else {
+			return cpfOrdemDeCompra;
+		}
 	}
 
 	private String getTelefoneVisao( String telefoneOrdemDeCompra ) {
-		return "(" + telefoneOrdemDeCompra.substring( 0, 2 ) + ")*****-" + telefoneOrdemDeCompra.substring( 7, 11 );
+		if ( telefoneOrdemDeCompra.length() == 11 ) {
+			return "(" + telefoneOrdemDeCompra.substring( 0, 2 ) + ")*****-" + telefoneOrdemDeCompra.substring( 7, 11 );
+		} else {
+			return telefoneOrdemDeCompra;
+		}
 	}
 
 	public NumeroRifa toEntity() {

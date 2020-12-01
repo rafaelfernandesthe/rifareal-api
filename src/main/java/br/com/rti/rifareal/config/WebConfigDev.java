@@ -8,11 +8,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
-@Profile( "prod" )
-public class WebConfig implements WebMvcConfigurer {
+@Profile( "dev" )
+public class WebConfigDev implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping( "/**" ).allowedMethods( "GET", "POST", "PUT" ).allowedOrigins( "https://rifareal.com.br" );
+		registry.addMapping( "/**" ).allowedMethods( "GET", "POST", "PUT" );
     }
 }
