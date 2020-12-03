@@ -3,6 +3,7 @@ package br.com.rti.rifareal.controllers.admin;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -39,6 +40,8 @@ public class RifaAdminController {
 	@PostMapping( "/saveNew" )
 	public RifaDTO save( @RequestBody RifaDTO reqObj ) {
 		Rifa entity = reqObj.toEntity();
+		entity.setDataInclusao( new Date() );
+		entity.setDataInicio( entity.getDataInclusao() );
 		entity.setStatus( StatusRifa.ABERTA );
 		entity.setRifasRestantes( entity.getRifasTotal() );
 		List<NumeroRifa> numeros = new ArrayList<NumeroRifa>();

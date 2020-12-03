@@ -75,6 +75,9 @@ public class OrdemDeCompraSiteController {
 
 			OrdemDeCompra objSalvo = ordemDeCompraRepository.save( persistenceObj );
 
+			loadedRifa.get().setRifasRestantes( loadedRifa.get().getRifasRestantes() - reqObj.getIdNumeros().size() );
+			rifaRepository.save( loadedRifa.get() );
+
 			return new OrdemDeCompraDTO( objSalvo );
 		}
 
