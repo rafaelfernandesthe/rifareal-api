@@ -1,10 +1,10 @@
 package br.com.rti.rifareal.domain.dto;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -26,19 +26,19 @@ public class RifaDTO implements Serializable {
 	private String codigo;
 	private String descricao;
 	private Integer valor;
-	private Integer diasTotal;
-	private Integer diasRestantes;
 	private Integer rifasTotal;
 	private Integer rifasRestantes;
-	@JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
+	@JsonFormat( pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS" )
 	private Date dataInclusao;
-	@JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
+	@JsonFormat( pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS" )
 	private Date dataInicio;
-	@JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
-	private Date dataFim;
-	private String dataFimStr;
+	@JsonFormat( pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS" )
+	private Date dataSorteio;
+	private String dataSorteioStr;
 	private String imagem;
+	private boolean telaPrincipal;
 	private List<NumeroRifaDTO> numeros;
+	private long diasRestantes;
 
 	public RifaDTO() {}
 
@@ -49,6 +49,10 @@ public class RifaDTO implements Serializable {
 		if ( !lazy ) {
 			this.setNumeros( rifa.getNumeros().stream().map( r -> new NumeroRifaDTO( r ) ).collect( Collectors.toList() ) );
 		}
+
+		long diffInMillies = Math.abs( new Date().getTime() - this.getDataSorteio().getTime() );
+
+		this.setDiasRestantes( TimeUnit.DAYS.convert( diffInMillies, TimeUnit.MILLISECONDS ) );
 	}
 
 	public Rifa toEntity() {
@@ -98,22 +102,6 @@ public class RifaDTO implements Serializable {
 		this.valor = valor;
 	}
 
-	public Integer getDiasTotal() {
-		return diasTotal;
-	}
-
-	public void setDiasTotal( Integer diasTotal ) {
-		this.diasTotal = diasTotal;
-	}
-
-	public Integer getDiasRestantes() {
-		return diasRestantes;
-	}
-
-	public void setDiasRestantes( Integer diasRestantes ) {
-		this.diasRestantes = diasRestantes;
-	}
-
 	public Integer getRifasTotal() {
 		return rifasTotal;
 	}
@@ -130,12 +118,20 @@ public class RifaDTO implements Serializable {
 		this.rifasRestantes = rifasRestantes;
 	}
 
-	public Date getDataFim() {
-		return dataFim;
+	public Date getDataSorteio() {
+		return dataSorteio;
 	}
 
-	public void setDataFim( Date dataFim ) {
-		this.dataFim = dataFim;
+	public void setDataSorteio( Date dataSorteio ) {
+		this.dataSorteio = dataSorteio;
+	}
+
+	public String getDataSorteioStr() {
+		return dataSorteioStr;
+	}
+
+	public void setDataSorteioStr( String dataSorteioStr ) {
+		this.dataSorteioStr = dataSorteioStr;
 	}
 
 	public String getImagem() {
@@ -144,6 +140,14 @@ public class RifaDTO implements Serializable {
 
 	public void setImagem( String imagem ) {
 		this.imagem = imagem;
+	}
+
+	public boolean isTelaPrincipal() {
+		return telaPrincipal;
+	}
+
+	public void setTelaPrincipal( boolean telaPrincipal ) {
+		this.telaPrincipal = telaPrincipal;
 	}
 
 	public List<NumeroRifaDTO> getNumeros() {
@@ -173,15 +177,12 @@ public class RifaDTO implements Serializable {
 		this.dataInicio = dataInicio;
 	}
 
-	public String getDataFimStr() {
-		if ( dataFim != null ) {
-			dataFimStr = new SimpleDateFormat( "dd/MM/yyyy" ).format( dataFim );
-		}
-		return dataFimStr;
+	public long getDiasRestantes() {
+		return diasRestantes;
 	}
 
-	public void setDataFimStr( String dataFimStr ) {
-		this.dataFimStr = dataFimStr;
+	public void setDiasRestantes( long diasRestantes ) {
+		this.diasRestantes = diasRestantes;
 	}
 
 	@Override
@@ -189,18 +190,18 @@ public class RifaDTO implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ( ( codigo == null ) ? 0 : codigo.hashCode() );
-		result = prime * result + ( ( dataFim == null ) ? 0 : dataFim.hashCode() );
 		result = prime * result + ( ( dataInclusao == null ) ? 0 : dataInclusao.hashCode() );
 		result = prime * result + ( ( dataInicio == null ) ? 0 : dataInicio.hashCode() );
+		result = prime * result + ( ( dataSorteio == null ) ? 0 : dataSorteio.hashCode() );
+		result = prime * result + ( ( dataSorteioStr == null ) ? 0 : dataSorteioStr.hashCode() );
 		result = prime * result + ( ( descricao == null ) ? 0 : descricao.hashCode() );
-		result = prime * result + ( ( diasRestantes == null ) ? 0 : diasRestantes.hashCode() );
-		result = prime * result + ( ( diasTotal == null ) ? 0 : diasTotal.hashCode() );
 		result = prime * result + ( ( id == null ) ? 0 : id.hashCode() );
 		result = prime * result + ( ( imagem == null ) ? 0 : imagem.hashCode() );
 		result = prime * result + ( ( numeros == null ) ? 0 : numeros.hashCode() );
 		result = prime * result + ( ( rifasRestantes == null ) ? 0 : rifasRestantes.hashCode() );
 		result = prime * result + ( ( rifasTotal == null ) ? 0 : rifasTotal.hashCode() );
 		result = prime * result + ( ( status == null ) ? 0 : status.hashCode() );
+		result = prime * result + ( telaPrincipal ? 1231 : 1237 );
 		result = prime * result + ( ( valor == null ) ? 0 : valor.hashCode() );
 		return result;
 	}
@@ -219,11 +220,6 @@ public class RifaDTO implements Serializable {
 				return false;
 		} else if ( !codigo.equals( other.codigo ) )
 			return false;
-		if ( dataFim == null ) {
-			if ( other.dataFim != null )
-				return false;
-		} else if ( !dataFim.equals( other.dataFim ) )
-			return false;
 		if ( dataInclusao == null ) {
 			if ( other.dataInclusao != null )
 				return false;
@@ -234,20 +230,20 @@ public class RifaDTO implements Serializable {
 				return false;
 		} else if ( !dataInicio.equals( other.dataInicio ) )
 			return false;
+		if ( dataSorteio == null ) {
+			if ( other.dataSorteio != null )
+				return false;
+		} else if ( !dataSorteio.equals( other.dataSorteio ) )
+			return false;
+		if ( dataSorteioStr == null ) {
+			if ( other.dataSorteioStr != null )
+				return false;
+		} else if ( !dataSorteioStr.equals( other.dataSorteioStr ) )
+			return false;
 		if ( descricao == null ) {
 			if ( other.descricao != null )
 				return false;
 		} else if ( !descricao.equals( other.descricao ) )
-			return false;
-		if ( diasRestantes == null ) {
-			if ( other.diasRestantes != null )
-				return false;
-		} else if ( !diasRestantes.equals( other.diasRestantes ) )
-			return false;
-		if ( diasTotal == null ) {
-			if ( other.diasTotal != null )
-				return false;
-		} else if ( !diasTotal.equals( other.diasTotal ) )
 			return false;
 		if ( id == null ) {
 			if ( other.id != null )
@@ -276,6 +272,8 @@ public class RifaDTO implements Serializable {
 			return false;
 		if ( status != other.status )
 			return false;
+		if ( telaPrincipal != other.telaPrincipal )
+			return false;
 		if ( valor == null ) {
 			if ( other.valor != null )
 				return false;
@@ -286,7 +284,7 @@ public class RifaDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Rifa [id=" + id + ", status=" + status + ", codigo=" + codigo + ", descricao=" + descricao + ", valor=" + valor + ", diasTotal=" + diasTotal + ", diasRestantes=" + diasRestantes + ", rifasTotal=" + rifasTotal + ", rifasRestantes=" + rifasRestantes + ", dataInclusao=" + dataInclusao + ", dataInicio=" + dataInicio + ", dataFim=" + dataFim + ", imagem=" + imagem + ", numeros=" + numeros + "]";
+		return "RifaDTO [id=" + id + ", status=" + status + ", codigo=" + codigo + ", descricao=" + descricao + ", valor=" + valor + ", rifasTotal=" + rifasTotal + ", rifasRestantes=" + rifasRestantes + ", dataInclusao=" + dataInclusao + ", dataInicio=" + dataInicio + ", dataSorteio=" + dataSorteio + ", dataSorteioStr=" + dataSorteioStr + ", imagem=" + imagem + ", telaPrincipal=" + telaPrincipal + ", numeros=" + numeros + "]";
 	}
 
 }
