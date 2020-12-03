@@ -1,6 +1,7 @@
 package br.com.rti.rifareal.domain.dto;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +52,6 @@ public class RifaDTO implements Serializable {
 		}
 
 		long diffInMillies = Math.abs( new Date().getTime() - this.getDataSorteio().getTime() );
-
 		this.setDiasRestantes( TimeUnit.DAYS.convert( diffInMillies, TimeUnit.MILLISECONDS ) );
 	}
 
@@ -127,6 +127,9 @@ public class RifaDTO implements Serializable {
 	}
 
 	public String getDataSorteioStr() {
+		if ( dataSorteio != null ) {
+			dataSorteioStr = new SimpleDateFormat( "dd/MM/yyyy" ).format( dataSorteio );
+		}
 		return dataSorteioStr;
 	}
 
