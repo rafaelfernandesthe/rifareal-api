@@ -46,10 +46,13 @@ public class NumeroRifaDTO implements Serializable {
 		String[] nomeSplited = nomeOrdemDeCompra.split( " " );
 		nome = nomeSplited[0];
 		if ( nomeSplited.length > 1 ) {
-			nome += " " + nomeSplited[1];
+			nome += " " + String.join( " ", nomeSplited[1] ).replaceAll( "[\\w\\d]", "*" );
 		}
 		if ( nomeSplited.length > 2 ) {
-			nome += " " + String.join( " ", nomeSplited ).replaceAll( "[\\w\\d]", "*" );
+			nome += " " + String.join( " ", nomeSplited[2] ).replaceAll( "[\\w\\d]", "*" );
+		}
+		if ( nomeSplited.length > 3 ) {
+			nome += " " + nomeSplited[3];
 		}
 		return nome;
 	}
