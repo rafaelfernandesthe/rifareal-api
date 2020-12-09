@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import br.com.rti.rifareal.domain.NumeroRifa;
 import br.com.rti.rifareal.domain.OrdemDeCompra;
 import br.com.rti.rifareal.domain.Rifa;
+import br.com.rti.rifareal.domain.enums.StatusNumeroRifa;
 
 @JsonInclude( Include.NON_EMPTY )
 public class OrdemDeCompraDTO implements Serializable {
@@ -32,6 +33,10 @@ public class OrdemDeCompraDTO implements Serializable {
 
 	private Integer valorTotal;
 
+	private String status;
+
+	private StatusNumeroRifa novoStatus;
+
 	public OrdemDeCompraDTO() {}
 
 	public OrdemDeCompraDTO( OrdemDeCompra ordemDeCompra ) {
@@ -39,6 +44,7 @@ public class OrdemDeCompraDTO implements Serializable {
 		BeanUtils.copyProperties( ordemDeCompra, this );
 		this.setIdRifa( ordemDeCompra.getRifa().getId() );
 		this.setIdNumeros( ordemDeCompra.getNumeros().stream().map( n -> n.getId() ).collect( Collectors.toList() ) );
+		this.setStatus( ordemDeCompra.getNumeros().get( 0 ).getStatus().name() );
 	}
 
 	public OrdemDeCompra toEntity() {
@@ -119,6 +125,22 @@ public class OrdemDeCompraDTO implements Serializable {
 
 	public void setIdNumeros( List<Long> idNumeros ) {
 		this.idNumeros = idNumeros;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus( String status ) {
+		this.status = status;
+	}
+
+	public StatusNumeroRifa getNovoStatus() {
+		return novoStatus;
+	}
+
+	public void setNovoStatus( StatusNumeroRifa novoStatus ) {
+		this.novoStatus = novoStatus;
 	}
 
 	@Override
