@@ -44,16 +44,15 @@ public class NumeroRifaDTO implements Serializable {
 	private String getNomeVisao( String nomeOrdemDeCompra ) {
 		String nome = "";
 		String[] nomeSplited = nomeOrdemDeCompra.split( " " );
-		nome = nomeSplited[0];
-		if ( nomeSplited.length > 1 ) {
-			nome += " " + String.join( " ", nomeSplited[1] ).replaceAll( "[\\w\\d]", "*" );
+
+		for ( int i = 0; i < nomeSplited.length; i++ ) {
+			if ( i == 1 || i == 2 ) {
+				nome += " " + String.join( " ", nomeSplited[i] ).replaceAll( "[\\w\\d]", "*" );
+			} else {
+				nome += " " + nomeSplited[i];
+			}
 		}
-		if ( nomeSplited.length > 2 ) {
-			nome += " " + String.join( " ", nomeSplited[2] ).replaceAll( "[\\w\\d]", "*" );
-		}
-		if ( nomeSplited.length > 3 ) {
-			nome += " " + nomeSplited[3];
-		}
+
 		return nome;
 	}
 
