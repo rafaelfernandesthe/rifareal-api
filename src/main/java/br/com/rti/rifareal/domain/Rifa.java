@@ -36,6 +36,7 @@ public class Rifa implements Serializable {
 
 	private String codigo;
 	private String descricao;
+	private Integer premioEmDinheiro;
 	private Integer valor;
 	private Integer rifasTotal;
 	private Integer rifasRestantes;
@@ -170,6 +171,14 @@ public class Rifa implements Serializable {
 		this.dataInicio = dataInicio;
 	}
 
+	public Integer getPremioEmDinheiro() {
+		return premioEmDinheiro;
+	}
+
+	public void setPremioEmDinheiro( Integer premioEmDinheiro ) {
+		this.premioEmDinheiro = premioEmDinheiro;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -182,6 +191,7 @@ public class Rifa implements Serializable {
 		result = prime * result + ( ( id == null ) ? 0 : id.hashCode() );
 		result = prime * result + ( ( imagem == null ) ? 0 : imagem.hashCode() );
 		result = prime * result + ( ( numeros == null ) ? 0 : numeros.hashCode() );
+		result = prime * result + ( ( premioEmDinheiro == null ) ? 0 : premioEmDinheiro.hashCode() );
 		result = prime * result + ( ( rifasRestantes == null ) ? 0 : rifasRestantes.hashCode() );
 		result = prime * result + ( ( rifasTotal == null ) ? 0 : rifasTotal.hashCode() );
 		result = prime * result + ( ( status == null ) ? 0 : status.hashCode() );
@@ -239,6 +249,11 @@ public class Rifa implements Serializable {
 				return false;
 		} else if ( !numeros.equals( other.numeros ) )
 			return false;
+		if ( premioEmDinheiro == null ) {
+			if ( other.premioEmDinheiro != null )
+				return false;
+		} else if ( !premioEmDinheiro.equals( other.premioEmDinheiro ) )
+			return false;
 		if ( rifasRestantes == null ) {
 			if ( other.rifasRestantes != null )
 				return false;
@@ -263,7 +278,7 @@ public class Rifa implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Rifa [id=" + id + ", status=" + status + ", codigo=" + codigo + ", descricao=" + descricao + ", valor=" + valor + ", rifasTotal=" + rifasTotal + ", rifasRestantes=" + rifasRestantes + ", dataInclusao=" + dataInclusao + ", dataInicio=" + dataInicio + ", dataSorteio=" + dataSorteio + ", imagem=" + imagem + ", telaPrincipal=" + telaPrincipal + ", numeros=" + numeros + "]";
+		return "Rifa [id=" + id + ", status=" + status + ", codigo=" + codigo + ", descricao=" + descricao + ", premioEmDinheiro=" + premioEmDinheiro + ", valor=" + valor + ", rifasTotal=" + rifasTotal + ", rifasRestantes=" + rifasRestantes + ", dataInclusao=" + dataInclusao + ", dataInicio=" + dataInicio + ", dataSorteio=" + dataSorteio + ", imagem=" + imagem + ", telaPrincipal=" + telaPrincipal + ", numeros=" + numeros + "]";
 	}
 
 }
